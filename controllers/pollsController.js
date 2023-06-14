@@ -2,7 +2,7 @@ const { BadRequestError } = require("../errors");
 const Poll = require("../models/Poll");
 const { createPollID, createUserID } = require("../utils/utils");
 const { validationResult } = require("express-validator");
-const { addParticipant } = require("./pollsService");
+const { addParticipant } = require("../service/pollsService");
 
 const createPoll = async (req, res) => {
 	const errors = validationResult(req);

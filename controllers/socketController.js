@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { removeParticipant, addParticipant } = require("./pollsService");
+const { removeParticipant, addParticipant } = require("../service/pollsService");
 const adminGuard = require("../middleware/admin");
-const isAdmin = require("../middleware/admin");
-const Poll = require("../models/Poll");
 
 const socketIO = (io) => {
 	io.use(async (socket, next) => {

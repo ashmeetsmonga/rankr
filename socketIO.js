@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { removeParticipant, addParticipant } = require("./controllers/pollsService");
 const adminGuard = require("./middleware/admin");
 const isAdmin = require("./middleware/admin");
 const Poll = require("./models/Poll");
@@ -20,30 +21,22 @@ const socketIO = (io) => {
 		}
 	});
 
-	io.on("connection", (socket) => {
-		console.log(
-			"A new user connected with id:",
-			socket.userID,
-			", pollID:",
-			socket.pollID,
-			"and name:",
-			socket.name
-		);
-		io.emit("hello", `Hello from id:${socket.client.id}`);
+	io.on("connection", async (socket) => {
+		const updatedPoll = await addParticipant(socket.pollID, socket.userID, socket.name);
+		socket.emit("poll_updated", updatedPoll);
 
-		socket.on("remove_participants", async (data) => {
-			console.log("remove_participants data:", data);
+		socket.on("remove_participant", async (data) => {
 			if (!socket.isAdmin) {
-				console.log("Admin Priviliges required in console");
 				socket.emit("remove_participants", "Admin Priviliges required");
 			} else {
-				const poll = await Poll.findOne({ pollID: socket.pollID });
-				poll.participants = poll.participants.filter(
-					(participant) => participant.userID !== data.userID
-				);
-				await poll.save();
-				socket.emit("remove_participants", `Participant with userID ${data.userID} removed!!!`);
+				const updatedPoll = await removeParticipant(socket.pollID, data.userID);
+				socket.emit("poll_updated", updatedPoll);
 			}
+		});
+
+		socket.on("disconnect", async () => {
+			const updatedPoll = await removeParticipant(socket.pollID, socket.userID);
+			socket.emit("poll_updated", updatedPoll);
 		});
 	});
 };

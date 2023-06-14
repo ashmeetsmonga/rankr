@@ -8,14 +8,17 @@ const addParticipant = async (pollID, userID, name) => {
 	poll.participants.push({ userID, name });
 	await poll.save();
 
-	const token = poll.createJWT(userID, name);
-	return token;
+	return poll;
 };
 
 const removeParticipant = async (pollID, userID) => {
 	const poll = await Poll.findOne({ pollID });
+	if (!poll) throw new BadRequestError("PollID invalid or poll expired");
+
 	poll.participants = poll.participants.filter((participant) => participant.userID !== userID);
 	await poll.save();
+
+	return poll;
 };
 
 module.exports = { addParticipant, removeParticipant };

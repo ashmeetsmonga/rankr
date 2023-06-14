@@ -26,7 +26,11 @@ const joinPoll = async (req, res) => {
 
 	const userID = await createUserID();
 
-	const token = addParticipant(pollID, userID, name);
+	// const token = addParticipant(pollID, userID, name);
+	const poll = await Poll.findOne({ pollID });
+	if (!poll) throw new BadRequestError("PollID invalid or poll expired");
+
+	const token = poll.createJWT(userID, name);
 
 	res.json({ token });
 };

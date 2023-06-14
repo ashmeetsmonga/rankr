@@ -2,6 +2,7 @@ const { BadRequestError } = require("../errors");
 const Poll = require("../models/Poll");
 const { createPollID, createUserID } = require("../utils/utils");
 const { validationResult } = require("express-validator");
+const { addParticipant } = require("./pollsService");
 
 const createPoll = async (req, res) => {
 	const errors = validationResult(req);
@@ -25,13 +26,7 @@ const joinPoll = async (req, res) => {
 
 	const userID = await createUserID();
 
-	const poll = await Poll.findOne({ pollID });
-	if (!poll) throw new BadRequestError("PollID invalid or poll expired");
-
-	poll.participants.push({ userID, name });
-	await poll.save();
-
-	const token = poll.createJWT(userID, name);
+	const token = addParticipant(pollID, userID, name);
 
 	res.json({ token });
 };

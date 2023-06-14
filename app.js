@@ -10,7 +10,7 @@ const connectDB = require("./db/connect");
 const pollRoutes = require("./routes/pollsRoutes");
 const http = require("http");
 const { Server } = require("socket.io");
-const socketIO = require("./socketIO");
+const socketIO = require("./controllers/socketController");
 
 // const WebSocket = require("ws");
 // const webSocketApp = require("./webSocket");
@@ -29,13 +29,6 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const io = new Server(server);
 
-// const webSocketServer = new WebSocket.WebSocketServer({ server });
-
-// webSocketApp(webSocketServer);
-
-// server.on("upgrade", function (req, socket, head) {
-// 	console.log("In upgrade", req.headers.authorization);
-// });
 socketIO(io);
 
 const start = async () => {

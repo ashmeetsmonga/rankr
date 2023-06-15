@@ -12,4 +12,9 @@ const createUserID = () =>
 		return nanoid();
 	});
 
-module.exports = { createPollID, createUserID };
+const createNominationID = () =>
+	import("nanoid").then(({ customAlphabet }) => {
+		return customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", 8)();
+	});
+
+module.exports = { createPollID, createUserID, createNominationID };

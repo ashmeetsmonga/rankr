@@ -1,5 +1,10 @@
 const jwt = require("jsonwebtoken");
-const { removeParticipant, addParticipant } = require("../service/pollsService");
+const {
+	removeParticipant,
+	addParticipant,
+	addNomination,
+	removeNomination,
+} = require("../service/pollsService");
 const adminGuard = require("../middleware/admin");
 
 const socketIO = (io) => {
@@ -29,6 +34,19 @@ const socketIO = (io) => {
 				socket.emit("remove_participants", "Admin Priviliges required");
 			} else {
 				const updatedPoll = await removeParticipant(socket.pollID, data.userID);
+				io.to(socket.pollID).emit("poll_updated", updatedPoll);
+			}
+		});
+
+		socket.on("add_nomination", async (data) => {
+			const updatedPoll = await addNomination(socket.pollID, socket.userID, data.name);
+			io.to(socket.pollID).emit("poll_updated", updatedPoll);
+		});
+
+		socket.on("remove_nomination", async (data) => {
+			if (!socket.isAdmin) socket.emit("exception", "Admin Privilidges required");
+			else {
+				const updatedPoll = await removeNomination(socket.pollID, data.nominationID);
 				io.to(socket.pollID).emit("poll_updated", updatedPoll);
 			}
 		});

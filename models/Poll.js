@@ -22,6 +22,10 @@ const PollSchema = new mongoose.Schema(
 			type: [{ userID: String, name: String }],
 			default: [],
 		},
+		nominations: {
+			type: [{ nominationID: String, userID: String, name: String }],
+			default: [],
+		},
 		adminID: {
 			type: String,
 			required: [true, "Please provide adminID"],

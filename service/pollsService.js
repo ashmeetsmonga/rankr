@@ -46,4 +46,29 @@ const removeNomination = async (pollID, nominationID) => {
 	return poll;
 };
 
-module.exports = { addParticipant, removeParticipant, addNomination, removeNomination };
+const submitNominations = async (pollID, userID, nominations) => {
+	const poll = await Poll.findOne({ pollID });
+	if (!poll) throw new BadRequestError("PollID invalid or expired");
+
+	poll.rankings.push({ userID, nominations });
+	await poll.save();
+
+	return poll;
+};
+
+const startPoll = async (pollID) => {
+	const poll = await Poll.findOne({ pollID });
+	if (!poll) return new BadRequestError("PollID invalid or expired");
+	poll.hasStarted = true;
+	await poll.save();
+	return poll;
+};
+
+module.exports = {
+	addParticipant,
+	removeParticipant,
+	addNomination,
+	removeNomination,
+	submitNominations,
+	startPoll,
+};

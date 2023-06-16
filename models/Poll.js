@@ -30,6 +30,13 @@ const PollSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "Please provide adminID"],
 		},
+		rankings: {
+			type: [{ userID: String, nominations: [{ type: String }] }],
+		},
+		hasStarted: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		timestamps: true,

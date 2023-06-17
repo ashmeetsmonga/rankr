@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useCreatePoll } from "./query-hooks";
 
@@ -8,7 +8,13 @@ const CreatePollModule = () => {
 	const [name, setName] = useState("");
 	const [votesPerVoter, setVotesPerVoter] = useState(1);
 
-	const { mutate: createPollMutation } = useCreatePoll();
+	const { mutate: createPollMutation, isSuccess } = useCreatePoll();
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (isSuccess) navigate("/waiting-room");
+	}, [isSuccess]);
 
 	const handleSubmit = () => {
 		if (!topic || topic.length > 100) {

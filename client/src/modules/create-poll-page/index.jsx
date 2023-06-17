@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useCreatePoll } from "./query-hooks";
 
 const CreatePollModule = () => {
-	const [pollTopic, setPollTopic] = useState("");
+	const [topic, setTopic] = useState("");
 	const [name, setName] = useState("");
 	const [votesPerVoter, setVotesPerVoter] = useState(1);
 
+	const { mutate: createPollMutation } = useCreatePoll();
+
 	const handleSubmit = () => {
-		if (!pollTopic || pollTopic.length > 100) {
+		if (!topic || topic.length > 100) {
 			toast.error("Poll Topic should be between 1 and 100 letters");
 			return;
 		} else if (!name || name.length > 25) {
 			toast.error("Name should be between 1 and 25 letters");
 			return;
 		}
+		createPollMutation({ topic, votesPerVoter, name });
 	};
 
 	return (
@@ -28,9 +32,9 @@ const CreatePollModule = () => {
 					<input
 						id='input-poll-topic'
 						type='text'
-						value={pollTopic}
-						onChange={(e) => setPollTopic(e.target.value)}
-						className='w-3/4 p-3 rounded-md bg-gray-900 outline-none focus:outline-none'
+						value={topic}
+						onChange={(e) => setTopic(e.target.value)}
+						className='w-3/4 p-3 text-center rounded-md bg-gray-900 outline-none focus:outline-none'
 					/>
 				</div>
 				<div className='text-xl text-center mt-6'>Votes Per Voter</div>
@@ -64,7 +68,7 @@ const CreatePollModule = () => {
 						type='text'
 						value={name}
 						onChange={(e) => setName(e.target.value)}
-						className='w-3/4 p-3 rounded-md bg-gray-900 outline-none focus:outline-none'
+						className='w-3/4 p-3 text-center rounded-md bg-gray-900 outline-none focus:outline-none'
 					/>
 				</div>
 

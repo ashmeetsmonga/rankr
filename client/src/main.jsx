@@ -5,13 +5,16 @@ import "./index.css";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { PollContextProvider } from "./context/PollContext";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<QueryClientProvider client={queryClient}>
 		<BrowserRouter>
-			<App />
+			<PollContextProvider>
+				<App />
+			</PollContextProvider>
 			<Toaster />
 		</BrowserRouter>
 	</QueryClientProvider>

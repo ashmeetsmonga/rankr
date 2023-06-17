@@ -37,6 +37,10 @@ const PollSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		results: {
+			type: [{ nominationID: String, name: String, score: Number }],
+			default: [],
+		},
 	},
 	{
 		timestamps: true,

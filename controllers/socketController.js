@@ -6,6 +6,8 @@ const {
 	removeNomination,
 	startPoll,
 	submitNominations,
+	closePoll,
+	cancelPoll,
 } = require("../service/pollsService");
 const adminGuard = require("../middleware/admin");
 
@@ -63,6 +65,22 @@ const socketIO = (io) => {
 			else {
 				const updatedPoll = await startPoll(socket.pollID);
 				io.to(socket.pollID).emit("poll_updated", updatedPoll);
+			}
+		});
+
+		socket.on("close_poll", async () => {
+			if (!socket.isAdmin) socket.emit("exception", "Admin Privilidges required");
+			else {
+				const updatedPoll = await closePoll(socket.pollID);
+				io.to(socket.pollID).emit("poll_updated", updatedPoll);
+			}
+		});
+
+		socket.on("cancel_poll", async () => {
+			if (!socket.isAdmin) socket.emit("exception", "Admin Privilidges required");
+			else {
+				await cancelPoll(socket.pollID);
+				io.to(socket.pollID).emit("poll_cancelled");
 			}
 		});
 

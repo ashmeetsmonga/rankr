@@ -1,6 +1,6 @@
 const { BadRequestError } = require("../errors");
 const Poll = require("../models/Poll");
-const { createNominationID } = require("../utils/utils");
+const { createNominationID, getResults } = require("../utils/utils");
 
 const addParticipant = async (pollID, userID, name) => {
 	const poll = await Poll.findOne({ pollID });
@@ -64,6 +64,18 @@ const startPoll = async (pollID) => {
 	return poll;
 };
 
+const closePoll = async (pollID) => {
+	const poll = await Poll.findOne({ pollID });
+	poll.results = getResults(poll.nominations, poll.rankings, poll.votesPerVoter);
+	await poll.save();
+	return poll;
+};
+
+const cancelPoll = async (pollID) => {
+	const poll = await Poll.findOne({ pollID });
+	await poll.remove();
+};
+
 module.exports = {
 	addParticipant,
 	removeParticipant,
@@ -71,4 +83,6 @@ module.exports = {
 	removeNomination,
 	submitNominations,
 	startPoll,
+	closePoll,
+	cancelPoll,
 };

@@ -22,9 +22,8 @@ export const useCreatePoll = () => {
 				setPoll(data.poll);
 				setPollAccessToken(data.token);
 				setAdmin(data.token, data.poll);
-				toast.success("Poll created successfully", {
-					id: toastID,
-				});
+				sessionStorage.setItem("token", data.token);
+				toast.remove(toastID);
 			},
 			onError: (err) => {
 				toast.error("Unable to create poll, please try after some time", {

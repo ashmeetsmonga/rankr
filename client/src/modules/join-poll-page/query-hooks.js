@@ -21,6 +21,7 @@ export const useJoinPoll = () => {
 				toast.remove(toastID);
 				setPoll(data.poll);
 				setPollAccessToken(data.token);
+				sessionStorage.setItem("token", data.token);
 				setAdmin(data.token, data.poll);
 			},
 			onError: (err) => {

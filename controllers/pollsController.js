@@ -31,7 +31,7 @@ const joinPoll = async (req, res) => {
 
 	const token = poll.createJWT(userID, name);
 
-	res.json({ token });
+	res.json({ poll, token });
 };
 
 const rejoinPoll = async (req, res) => {

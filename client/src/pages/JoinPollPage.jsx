@@ -1,7 +1,8 @@
 import React from "react";
+import JoinPollModule from "../modules/join-poll-page";
 
 const JoinPollPage = () => {
-	return <div>JoinPollPage</div>;
+	return <JoinPollModule />;
 };
 
 export default JoinPollPage;

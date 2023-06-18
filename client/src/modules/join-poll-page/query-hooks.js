@@ -4,30 +4,28 @@ import { toast } from "react-hot-toast";
 import { useContext } from "react";
 import { PollContext } from "../../context/PollContext";
 
-export const useCreatePoll = () => {
+export const useJoinPoll = () => {
 	let toastID = "";
 	const { setPoll, setPollAccessToken, setAdmin } = useContext(PollContext);
 	return useMutation(
-		async ({ topic, votesPerVoter, name }) => {
-			toastID = toast.loading("Creating New Poll");
-			const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/create`, {
-				topic,
-				votesPerVoter,
+		async ({ pollID, name }) => {
+			toastID = toast.loading("Joining Exisiting Poll");
+			const { data } = await axios.post(`${import.meta.env.VITE_BASE_URL}/join`, {
+				pollID,
 				name,
 			});
 			return data;
 		},
 		{
 			onSuccess: (data) => {
+				toast.remove(toastID);
 				setPoll(data.poll);
 				setPollAccessToken(data.token);
 				setAdmin(data.token, data.poll);
-				toast.success("Poll created successfully", {
-					id: toastID,
-				});
 			},
 			onError: (err) => {
-				toast.error("Unable to create poll, please try after some time", {
+				console.log(err);
+				toast.error("Unable to join poll, please try after some time", {
 					id: toastID,
 				});
 			},

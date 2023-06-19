@@ -8,6 +8,7 @@ export const PollContextProvider = ({ children }) => {
 	const [pollAccessToken, setPollAccessToken] = useState("");
 	const [isAdmin, setIsAdmin] = useState(false);
 	const [user, setUser] = useState({});
+	const [socket, setSocket] = useState(null);
 
 	const setAdmin = (token, poll) => {
 		const decoded = jwt_decode(token);
@@ -20,7 +21,18 @@ export const PollContextProvider = ({ children }) => {
 	};
 
 	return (
-		<PollContext.Provider value={{ poll, setPoll, pollAccessToken, setPollAccessToken, setAdmin }}>
+		<PollContext.Provider
+			value={{
+				poll,
+				setPoll,
+				pollAccessToken,
+				setPollAccessToken,
+				isAdmin,
+				setAdmin,
+				socket,
+				setSocket,
+			}}
+		>
 			{children}
 		</PollContext.Provider>
 	);

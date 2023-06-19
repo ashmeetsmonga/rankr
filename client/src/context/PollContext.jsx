@@ -7,9 +7,15 @@ export const PollContextProvider = ({ children }) => {
 	const [poll, setPoll] = useState({});
 	const [pollAccessToken, setPollAccessToken] = useState("");
 	const [isAdmin, setIsAdmin] = useState(false);
+	const [user, setUser] = useState({});
 
 	const setAdmin = (token, poll) => {
 		const decoded = jwt_decode(token);
+		const newUser = {
+			userID: decoded.userID,
+			name: decoded.name,
+		};
+		setUser(newUser);
 		setIsAdmin(decoded.userID === poll.adminID);
 	};
 

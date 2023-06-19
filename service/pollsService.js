@@ -6,6 +6,9 @@ const addParticipant = async (pollID, userID, name) => {
 	const poll = await Poll.findOne({ pollID });
 	if (!poll) throw new BadRequestError("PollID invalid or poll expired");
 
+	const participant = poll.participants.find((p) => p.userID === userID);
+	if (participant) return poll;
+
 	poll.participants.push({ userID, name });
 	await poll.save();
 

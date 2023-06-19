@@ -14,7 +14,8 @@ const adminGuard = require("../middleware/admin");
 const socketIO = (io) => {
 	io.use(async (socket, next) => {
 		try {
-			const token = socket.handshake.headers.authorization.split(" ")[1];
+			console.log("In socket settings", socket.handshake.auth.token);
+			const token = socket.handshake.auth.token.split(" ")[1];
 			const payload = jwt.verify(token, process.env.JWT_SECRET);
 			socket.pollID = payload.pollID;
 			socket.userID = payload.userID;
@@ -32,6 +33,7 @@ const socketIO = (io) => {
 		socket.join(socket.pollID);
 		const updatedPoll = await addParticipant(socket.pollID, socket.userID, socket.name);
 		io.to(socket.pollID).emit("poll_updated", updatedPoll);
+		console.log("Socket connected (from server)");
 
 		socket.on("remove_participant", async (data) => {
 			if (!socket.isAdmin) {

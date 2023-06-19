@@ -36,7 +36,13 @@ const WaitingRoomModule = () => {
 					<div className='w-full mt-10 flex flex-col items-center'>
 						<p className='text-lg mb-4'>Participants</p>
 						{poll.participants.map((participant, idx) => (
-							<h2 className='text-xl font-bold text-center p-1'>{participant.name}</h2>
+							<h2
+								className={`text-xl font-bold text-center m-1 ${
+									poll.adminID === participant.userID ? "border-b-2 border-white" : ""
+								}`}
+							>
+								{participant.name}
+							</h2>
 						))}
 					</div>
 					<div className='w-full mt-10 flex flex-col items-center'>
@@ -60,13 +66,14 @@ const WaitingRoomModule = () => {
 					onChange={(e) => setNomination(e.target.value)}
 					className='w-3/4 md:w-1/4 p-3 text-center rounded-md bg-gray-900 outline-none focus:outline-none'
 				/>
-				<div>
+				<div className='flex flex-col items-center'>
 					<button onClick={addNomination} className='block bg-orange-700 mt-4 px-5 py-3 rounded-md'>
 						Add Nomination
 					</button>
 					{isAdmin && (
 						<button className='w-full bg-green-700 mt-4 px-5 py-3 rounded-md'>Start Poll</button>
 					)}
+					{!isAdmin && <i className='mt-4'>Waiting for admin to start the poll</i>}
 				</div>
 			</div>
 		</div>

@@ -17,6 +17,10 @@ const WaitingRoomModule = () => {
 		setNomination("");
 	};
 
+	const startPoll = () => {
+		socket.emit("start_poll");
+	};
+
 	useEffect(() => {
 		if (!socket) {
 			const socket = initialiseSocket(setPoll);
@@ -71,7 +75,9 @@ const WaitingRoomModule = () => {
 						Add Nomination
 					</button>
 					{isAdmin && (
-						<button className='w-full bg-green-700 mt-4 px-5 py-3 rounded-md'>Start Poll</button>
+						<button onClick={startPoll} className='w-full bg-green-700 mt-4 px-5 py-3 rounded-md'>
+							Start Poll
+						</button>
 					)}
 					{!isAdmin && <i className='mt-4'>Waiting for admin to start the poll</i>}
 				</div>

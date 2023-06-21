@@ -56,9 +56,7 @@ const VotingPageModule = () => {
 				<button className='w-full block bg-green-700 mt-4 px-5 py-3 rounded-md'>
 					Submit Votes
 				</button>
-				<button className='w-full block bg-orange-700 mt-4 px-5 py-3 rounded-md'>
-					Cancel Poll
-				</button>
+				<button className='w-full block bg-orange-700 mt-4 px-5 py-3 rounded-md'>Close Poll</button>
 			</div>
 		</div>
 	);

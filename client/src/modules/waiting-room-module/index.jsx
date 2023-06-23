@@ -17,6 +17,10 @@ const WaitingRoomModule = () => {
 		setNomination("");
 	};
 
+	const removeNomination = (nomID) => {
+		socket.emit("remove_nomination", { nominationID: nomID });
+	};
+
 	const startPoll = () => {
 		socket.emit("start_poll");
 	};
@@ -52,11 +56,21 @@ const WaitingRoomModule = () => {
 					</div>
 					<div className='w-full mt-10 flex flex-col items-center'>
 						<p className='text-lg mb-4'>Nominations</p>
-						{poll?.nominations?.map((nomination, idx) => (
-							<h2 key={idx} className='text-xl font-bold text-center p-1'>
-								{nomination.name}
-							</h2>
-						))}
+						<div className='flex flex-col'>
+							{poll?.nominations?.map((nomination, idx) => (
+								<h2 key={idx} className='text-xl font-bold text-center p-1 relative'>
+									{nomination.name}
+									{isAdmin && (
+										<button
+											onClick={() => removeNomination(nomination.nominationID)}
+											className='absolute top-1 -right-7 text-[15px] bg-gray-900 rounded-full px-2'
+										>
+											x
+										</button>
+									)}
+								</h2>
+							))}
+						</div>
 					</div>
 				</div>
 			</div>

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { PollContext } from "../../context/PollContext";
 
 const VotingPageModule = () => {
-	const { poll } = useContext(PollContext);
+	const { poll, isAdmin, socket } = useContext(PollContext);
 
 	const [totalVotes, setTotalVotes] = useState(0);
 	const [selectedNominations, setSelectedNominations] = useState([]);
@@ -10,6 +10,14 @@ const VotingPageModule = () => {
 	const getNomIdx = (nominationID) => {
 		const nomIdx = selectedNominations.findIndex((nomID) => nomID === nominationID);
 		return nomIdx;
+	};
+
+	const handleSubmit = () => {
+		socket.emit("submit_nominations", { nominations: selectedNominations });
+	};
+
+	const handleClose = () => {
+		socket.emit("close_poll");
 	};
 
 	const handleNominationSelection = (nominationID) => {
@@ -53,10 +61,20 @@ const VotingPageModule = () => {
 				</div>
 			</div>
 			<div className='flex flex-col items-center'>
-				<button className='w-full block bg-green-700 mt-4 px-5 py-3 rounded-md'>
+				<button
+					onClick={handleSubmit}
+					className='w-full block bg-green-700 mt-4 px-5 py-3 rounded-md'
+				>
 					Submit Votes
 				</button>
-				<button className='w-full block bg-orange-700 mt-4 px-5 py-3 rounded-md'>Close Poll</button>
+				{isAdmin && (
+					<button
+						onClick={handleClose}
+						className='w-full block bg-orange-700 mt-4 px-5 py-3 rounded-md'
+					>
+						Close Poll
+					</button>
+				)}
 			</div>
 		</div>
 	);

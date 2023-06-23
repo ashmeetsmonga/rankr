@@ -31,7 +31,7 @@ const getResults = (nominations, rankings, votesPerVoter) => {
 		}
 	}
 
-	results.sort((a, b) => a.score - b.score);
+	results.sort((a, b) => b.score - a.score);
 
 	console.log("results", results);
 

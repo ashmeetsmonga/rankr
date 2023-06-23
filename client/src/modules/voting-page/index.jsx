@@ -21,6 +21,7 @@ const VotingPageModule = () => {
 	};
 
 	const handleNominationSelection = (nominationID) => {
+		if (poll.votesPerVoter - selectedNominations.length === 0) return;
 		const nomIdx = getNomIdx(nominationID);
 		if (nomIdx !== -1)
 			setSelectedNominations((prev) => {
@@ -51,22 +52,25 @@ const VotingPageModule = () => {
 						<div
 							key={idx}
 							onClick={() => handleNominationSelection(nom.nominationID)}
-							className={`w-full mb-4 text-xl cursor-pointer bg-gray-900 p-2 px-6 rounded-lg ${
+							className={`w-full relative mb-4 text-xl cursor-pointer bg-gray-900 p-2 px-6 rounded-lg ${
 								getNomIdx(nom.nominationID) !== -1 ? "border-2" : ""
 							}`}
 						>
 							{nom.name}
+							{getNomIdx(nom.nominationID) !== -1 && (
+								<div className='absolute -top-3 -right-2 text-[13px] bg-white text-black rounded-full px-2'>
+									{getNomIdx(nom.nominationID) + 1}
+								</div>
+							)}
 						</div>
 					))}
 				</div>
 			</div>
 			<div className='flex flex-col items-center'>
-				<button
-					onClick={handleSubmit}
-					className='w-full block bg-green-700 mt-4 px-5 py-3 rounded-md'
-				>
+				<button onClick={handleSubmit} className='block bg-green-700 mt-4 px-5 py-3 rounded-md'>
 					Submit Votes
 				</button>
+				{!isAdmin && <i className='mt-4'>Waiting for admin to close the poll</i>}
 				{isAdmin && (
 					<button
 						onClick={handleClose}

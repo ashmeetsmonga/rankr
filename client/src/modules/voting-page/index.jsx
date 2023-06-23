@@ -4,7 +4,7 @@ import { PollContext } from "../../context/PollContext";
 const VotingPageModule = () => {
 	const { poll, isAdmin, socket } = useContext(PollContext);
 
-	const [totalVotes, setTotalVotes] = useState(0);
+	const [votesSubmitted, setVotesSubmitted] = useState(false);
 	const [selectedNominations, setSelectedNominations] = useState([]);
 
 	const getNomIdx = (nominationID) => {
@@ -14,6 +14,7 @@ const VotingPageModule = () => {
 
 	const handleSubmit = () => {
 		socket.emit("submit_nominations", { nominations: selectedNominations });
+		setVotesSubmitted(true);
 	};
 
 	const handleClose = () => {
@@ -34,10 +35,6 @@ const VotingPageModule = () => {
 				return [...prev, nominationID];
 			});
 	};
-
-	useEffect(() => {
-		setTotalVotes(poll.votesPerVoter);
-	}, []);
 
 	return (
 		<div className='min-h-screen p-4 flex flex-col justify-around items-center bg-gray-800 text-white'>
@@ -67,7 +64,11 @@ const VotingPageModule = () => {
 				</div>
 			</div>
 			<div className='flex flex-col items-center'>
-				<button onClick={handleSubmit} className='block bg-green-700 mt-4 px-5 py-3 rounded-md'>
+				<button
+					disabled={votesSubmitted}
+					onClick={handleSubmit}
+					className='block bg-green-700 mt-4 px-5 py-3 rounded-md disabled:opacity-50'
+				>
 					Submit Votes
 				</button>
 				{!isAdmin && <i className='mt-4'>Waiting for admin to close the poll</i>}

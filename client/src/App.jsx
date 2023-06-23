@@ -7,6 +7,7 @@ import WaitingRoomPage from "./pages/WaitingRoomPage";
 import VotingPage from "./pages/VotingPage";
 import { useContext, useEffect } from "react";
 import { PollContext } from "./context/PollContext";
+import RankingsPage from "./pages/RankingsPage";
 
 function App() {
 	const { poll } = useContext(PollContext);
@@ -14,6 +15,7 @@ function App() {
 
 	useEffect(() => {
 		if (poll.hasStarted) navigate("/voting-page");
+		if (poll?.results?.length > 0) navigate("/rankings-page");
 	}, [poll]);
 
 	return (
@@ -24,6 +26,7 @@ function App() {
 				<Route path='/join-poll' element={<JoinPollPage />} />
 				<Route path='/waiting-room' element={<WaitingRoomPage />} />
 				<Route path='/voting-page' element={<VotingPage />} />
+				<Route path='/rankings-page' element={<RankingsPage />} />
 			</Routes>
 		</div>
 	);

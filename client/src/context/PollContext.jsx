@@ -20,6 +20,14 @@ export const PollContextProvider = ({ children }) => {
 		setIsAdmin(decoded.userID === poll.adminID);
 	};
 
+	const resetPoll = () => {
+		setPoll({});
+		setPollAccessToken("");
+		setIsAdmin(false);
+		setUser({});
+		setSocket(null);
+	};
+
 	return (
 		<PollContext.Provider
 			value={{
@@ -31,6 +39,7 @@ export const PollContextProvider = ({ children }) => {
 				setAdmin,
 				socket,
 				setSocket,
+				resetPoll,
 			}}
 		>
 			{children}

@@ -1,10 +1,18 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { PollContext } from "../../context/PollContext";
 
 const RankingsPageModule = () => {
-	const { poll } = useContext(PollContext);
+	const { poll, resetPoll } = useContext(PollContext);
+
+	const navigate = useNavigate();
 
 	console.log(poll);
+
+	const handleReset = () => {
+		resetPoll();
+		navigate("/");
+	};
 
 	return (
 		<div className='min-h-screen p-4 flex flex-col justify-around items-center bg-gray-800 text-white'>
@@ -17,7 +25,7 @@ const RankingsPageModule = () => {
 						{poll?.results?.map((nomination, idx) => (
 							<h2
 								key={idx}
-								className={`text-xl bg-gray-900 py-2 px-4 rounded-lg font-bold text-center m-1`}
+								className={`w-full text-xl bg-gray-900 py-2 px-4 rounded-lg font-bold text-center m-1`}
 							>
 								{nomination.name}
 							</h2>
@@ -25,6 +33,9 @@ const RankingsPageModule = () => {
 					</div>
 				</div>
 			</div>
+			<button onClick={handleReset} className='bg-green-700 mt-4 px-10 py-3 rounded-md'>
+				New Poll
+			</button>
 		</div>
 	);
 };

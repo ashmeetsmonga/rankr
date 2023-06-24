@@ -22,7 +22,6 @@ const VotingPageModule = () => {
 	};
 
 	const handleNominationSelection = (nominationID) => {
-		if (poll.votesPerVoter - selectedNominations.length === 0) return;
 		const nomIdx = getNomIdx(nominationID);
 		if (nomIdx !== -1)
 			setSelectedNominations((prev) => {
@@ -30,10 +29,12 @@ const VotingPageModule = () => {
 				newSelections.splice(nomIdx, 1);
 				return newSelections;
 			});
-		else
+		else {
+			if (poll.votesPerVoter - selectedNominations.length === 0) return;
 			setSelectedNominations((prev) => {
 				return [...prev, nominationID];
 			});
+		}
 	};
 
 	return (
